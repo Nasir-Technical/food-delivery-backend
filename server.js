@@ -18,19 +18,6 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 4000;
 
-
-// Fallback to frontend index.html for React Router
-// app.get('*', (req, res, next) => {
-//     const requestPath = req.path;
-//     if (requestPath.startsWith('/admin')) {
-//         res.sendFile(path.join(__dirname, '../admin/dist', 'index.html'));
-//     } else if (requestPath.startsWith('/api') || requestPath.startsWith('/images')) {
-//         next(); // Skip to next middleware for API and images routes
-//     } else {
-//         res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
-//     }
-// });
-
 // Middleware
 app.use(express.json());
 app.use(cors({
@@ -52,9 +39,6 @@ app.use('/images', express.static('uploads'));
 
 // Serve frontend build
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-// Serve admin build
-app.use('/admin', express.static(path.join(__dirname, '../admin/dist')));
 
 app.listen(port, () => {
     console.log(`Server started on http://localhost:${port}`);
