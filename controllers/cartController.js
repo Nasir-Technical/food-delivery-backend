@@ -60,6 +60,8 @@ const removeFromCart = async (req, res) => {
 
 // Fetch user cart data
 const getCart = async (req, res) => {
+
+    console.log("Yaha tak to a rha")
     try {
         const { userId } = req.body;
 
