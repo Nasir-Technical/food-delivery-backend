@@ -19,9 +19,13 @@ const port = process.env.PORT || 4000;
 
 // Middleware
 app.use(express.json());
+// const cors = require('cors');
+
+// Express app mein CORS middleware ko add karain
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'], // Allow these URLs
-  allowedHeaders: 'Content-Type,Authorization',
+    origin: ['https://food-delivery-backend-eta.vercel.app', 'https://mr-foodi.vercel.app'], // Yahan multiple origins ko allow karein
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
 }));
 
 // DB connection
@@ -39,13 +43,13 @@ app.use('/images', express.static('uploads'));
 // Serve static files from frontend build
 app.use(express.static(path.join(__dirname, './dist')));
 
-// Serve static files from admin build
-app.use('/admin', express.static(path.join(__dirname, '../admin/dist')));
+// // Serve static files from admin build
+// app.use('/admin', express.static(path.join(__dirname, '../admin/dist')));
 
-// Handle admin routes
-app.get('/admin/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../admin/dist', 'index.html'));
-});
+// // Handle admin routes
+// app.get('/admin/*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../admin/dist', 'index.html'));
+// });
 
 // Handle frontend routes
 app.get('*', (req, res) => {
