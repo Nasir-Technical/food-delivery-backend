@@ -19,11 +19,8 @@ const port = process.env.PORT || 4000;
 
 // Middleware
 app.use(express.json());
-const cors = require('cors');
-
-// Express app mein CORS middleware ko add karain
 app.use(cors({
-    origin: 'https://food-delivery-backend-lake.vercel.app/', // yahan apna frontend URL likhein
+    origin: 'https://food-delivery-backend-lake.vercel.app/', // Your frontend URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
