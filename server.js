@@ -19,12 +19,10 @@ const port = process.env.PORT || 4000;
 
 // Middleware
 app.use(express.json());
-// const cors = require('cors');
 
-// Express app mein CORS middleware ko add karain
+// CORS configuration
 app.use(cors({
-    origin: ['https://food-delivery-backend-eta.vercel.app', 'https://mr-foodi.vercel.app'], // Yahan multiple origins ko allow karein
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: ['https://food-delivery-backend-eta.vercel.app', 'https://mr-foodi.vercel.app'], // Yahan multiple origins ko allow karein    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
 
@@ -38,22 +36,28 @@ app.use('/api/cart', cartRouter);
 app.use('/api/order', orderRouter);
 
 // Serve images from uploads folder
-app.use('/images', express.static('uploads'));
+app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
 // Serve static files from frontend build
-app.use(express.static(path.join(__dirname, './dist')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
-// // Serve static files from admin build
+// Serve static files from admin build if needed
 // app.use('/admin', express.static(path.join(__dirname, '../admin/dist')));
 
-// // Handle admin routes
+// Handle admin routes if needed
 // app.get('/admin/*', (req, res) => {
 //   res.sendFile(path.join(__dirname, '../admin/dist', 'index.html'));
 // });
 
 // Handle frontend routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
 });
 
 app.listen(port, () => {
