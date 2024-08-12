@@ -1,4 +1,3 @@
-// server.js
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
@@ -21,8 +20,8 @@ const port = process.env.PORT || 4000;
 // Middleware
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:5173', // Allow this URL
-    allowedHeaders: 'Content-Type,Authorization',
+  origin: ['http://localhost:5173', 'http://localhost:5174'], // Allow these URLs
+  allowedHeaders: 'Content-Type,Authorization',
 }));
 
 // DB connection
@@ -37,9 +36,22 @@ app.use('/api/order', orderRouter);
 // Serve images from uploads folder
 app.use('/images', express.static('uploads'));
 
-// Serve frontend build
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
+// Serve static files from frontend build
+app.use(express.static(path.join(__dirname, './dist')));
+
+// Serve static files from admin build
+app.use('/admin', express.static(path.join(__dirname, '../admin/dist')));
+
+// Handle admin routes
+app.get('/admin/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../admin/dist', 'index.html'));
+});
+
+// Handle frontend routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './dist', 'index.html'));
+});
 
 app.listen(port, () => {
-    console.log(`Server started on http://localhost:${port}`);
+  console.log(`Server started on http://localhost:${port}`);
 });
