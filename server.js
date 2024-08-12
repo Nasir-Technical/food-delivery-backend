@@ -22,7 +22,8 @@ app.use(express.json());
 
 // CORS configuration
 app.use(cors({
-  origin: ['https://food-delivery-backend-eta.vercel.app', 'https://mr-foodi.vercel.app'], // Yahan multiple origins ko allow karein    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: 'https://mr-foodi.vercel.app',  // Yahan apne frontend ki URL likhein
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
 
