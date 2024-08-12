@@ -23,9 +23,9 @@ const cors = require('cors');
 
 // Express app mein CORS middleware ko add karain
 app.use(cors({
-    origin: 'https://food-delivery-backend-eta.vercel.app', // yahan apna frontend URL likhein
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
+  origin: 'https://food-delivery-backend-lake.vercel.app', // Allow only this origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these methods
+  allowedHeaders: ['Content-Type', 'Authorization'] // Allow these headers
 }));
 
 // DB connection
