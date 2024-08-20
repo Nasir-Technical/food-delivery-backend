@@ -39,13 +39,13 @@ app.use('/images', express.static('uploads'));
 // Serve static files from frontend build
 app.use(express.static(path.join(__dirname, './dist')));
 
-// Serve static files from admin build
-app.use('/admin', express.static(path.join(__dirname, '../admin/dist')));
+// // Serve static files from admin build
+// app.use('/admin', express.static(path.join(__dirname, '../admin/dist')));
 
-// Handle admin routes
-app.get('/admin/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../admin/dist', 'index.html'));
-});
+// // Handle admin routes
+// app.get('/admin/*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../admin/dist', 'index.html'));
+// });
 
 // Handle frontend routes
 app.get('*', (req, res) => {
