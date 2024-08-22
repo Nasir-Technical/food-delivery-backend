@@ -20,7 +20,7 @@ const port = process.env.PORT || 4000;
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: "https://mr-food-deliver.vercel.app/", // Allow these URLs
+  origin: "https://mr-food-del.vercel.app", // Allow these URLs
   // origin: ["http://localhost:5173"], // Allow local frontend URL
   allowedHeaders: 'Content-Type,Authorization',
 }));
