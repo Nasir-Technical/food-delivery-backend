@@ -21,6 +21,7 @@ const port = process.env.PORT || 4000;
 app.use(express.json());
 app.use(cors({
   origin: "https://mr-food-deliver.vercel.app/", // Allow these URLs
+  // origin: ["http://localhost:5173"], // Allow local frontend URL
   allowedHeaders: 'Content-Type,Authorization',
 }));
 
