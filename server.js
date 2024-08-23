@@ -20,10 +20,9 @@ const port = process.env.PORT || 4000;
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: "https://mr-food-del.vercel.app", // Allow frontend URL
-  allowedHeaders: 'Content-Type,Authorization',
+  origin: ["http://localhost:5173", "http://localhost:5174"], // Allow frontend URLs
+  allowedHeaders: 'Content-Type,Authorization,token', // Add `token` header here
 }));
-
 
 // DB connection
 connectDB();
@@ -37,16 +36,16 @@ app.use('/api/order', orderRouter);
 // Serve images from uploads folder
 app.use('/images', express.static('uploads'));
 
+// Serve static files from admin build
+app.use('/admin', express.static(path.join(__dirname, './admdist')));
+
+// Handle admin routes
+app.get('/admin/*', (req, res) => {
+  res.sendFile(path.join(__dirname, './admdist', 'index.html'));
+});
+
 // Serve static files from frontend build
 app.use(express.static(path.join(__dirname, './dist')));
-
-// // Serve static files from admin build
-// app.use('/admin', express.static(path.join(__dirname, '../admin/dist')));
-
-// // Handle admin routes
-// app.get('/admin/*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../admin/dist', 'index.html'));
-// });
 
 // Handle frontend routes
 app.get('*', (req, res) => {
