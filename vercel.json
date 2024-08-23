@@ -1,36 +1,29 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "frontend/package.json",
-        "use": "@vercel/static-build",
-        "config": {
-          "distDir": "dist"
-        }
-      },
-      {
-        "src": "admin/package.json",
-        "use": "@vercel/static-build",
-        "config": {
-          "distDir": "admdist"
-        }
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
       }
-    ],
-    "routes": [
-      {
-        "src": "/admin/(.*)",
-        "dest": "/admin/$1",
-        "headers": {
-          "x-accel-redirect": "/admin/$1"
-        }
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/dist/$1",
-        "headers": {
-          "x-accel-redirect": "/dist/$1"
-        }
+    },
+    {
+      "src": "admin/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "admdist"
       }
-    ]
-  }
-  
+    }
+  ],
+  "routes": [
+    {
+      "src": "/admin/(.*)",
+      "dest": "/admdist/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/$1"
+    }
+  ]
+}
