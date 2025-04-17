@@ -18,11 +18,14 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 // Middleware
-app.use(express.json());
 app.use(cors({
-  origin: ["https://mr-food-del.vercel.app/","http://localhost:5173", "http://localhost:5174"], // Allow frontend URLs
-  allowedHeaders: 'Content-Type,Authorization,token', // Add `token` header here
+  origin: ["https://mr-food-del.vercel.app", "http://localhost:5173", "http://localhost:5174"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "token"],
+  credentials: true,
+  optionsSuccessStatus: 200 // For legacy browser support
 }));
+
 
 // DB connection
 connectDB();
