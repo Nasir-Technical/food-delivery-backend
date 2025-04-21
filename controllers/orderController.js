@@ -1,7 +1,7 @@
 import orderModel from "../models/orderModel.js";
 import userModel from '../models/userModel.js'
 import   Stripe  from "stripe"
-import orderRouter from "../routes/orderRoute.js";
+// import orderRouter from "../routes/orderRoute.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
