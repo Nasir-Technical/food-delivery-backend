@@ -6,25 +6,30 @@
       "use": "@vercel/node"
     },
     {
-      "src": "admdist/*",
-      "use": "@vercel/static"  
+      "src": "admdist/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
-   
     {
       "src": "/api/(.*)",
       "dest": "server.js"
     },
-    
+    {
+      "src": "/admin",
+      "dest": "/admdist/index.html"
+    },
     {
       "src": "/admin/(.*)",
-      "dest": "server.js"  
+      "dest": "/admdist/index.html"
     },
-    
+    {
+      "src": "/images/(.*)",
+      "dest": "server.js"
+    },
     {
       "src": "/(.*)",
-      "dest": "server.js"  
+      "dest": "server.js"
     }
   ]
 }
