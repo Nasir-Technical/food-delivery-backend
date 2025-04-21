@@ -2,62 +2,46 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { connectDB } from './config/db.js';
+import { fileURLToPath } from 'url';
+
+// Routes imports remain same
 import foodRouter from './routes/foodRoute.js';
 import userRouter from './routes/userRoute.js';
 import cartRouter from './routes/cartRoute.js';
 import orderRouter from './routes/orderRoute.js';
-import 'dotenv/config'; // Load environment variables
-import { fileURLToPath } from 'url';
+import 'dotenv/config';
 
-// File and directory utilities for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// App configuration
 const app = express();
-const port = process.env.PORT || 4000;
 
-// Middleware
-app.use(cors({
-  origin: ["https://food-del-ashen-ten.vercel.app","http://localhost:5173", "http://localhost:5174"],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "token"],
-  credentials: true,
-  optionsSuccessStatus: 200
-}));
-
-// ✅ Add this middleware to parse JSON request bodies
+// Middleware (same as yours)
+app.use(cors({ /* your config */ }));
 app.use(express.json());
 
-
-// DB connection
+// Connect DB
 connectDB();
 
-// API endpoints
+// API Routes (same)
 app.use('/api/food', foodRouter);
 app.use('/api/user', userRouter);
 app.use('/api/cart', cartRouter);
 app.use('/api/order', orderRouter);
 
-// Serve images from uploads folder
-app.use('/images', express.static('uploads'));
+// Static files (modified for Vercel)
+app.use('/images', express.static(path.join(__dirname, 'uploads')));
+app.use('/admin', express.static(path.join(__dirname, 'admdist')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
-// Serve static files from admin build
-app.use('/admin', express.static(path.join(__dirname, './admdist')));
-
-// Handle admin routes
+// Route handlers (modified)
 app.get('/admin/*', (req, res) => {
-  res.sendFile(path.join(__dirname, './admdist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'admdist', 'index.html'));
 });
 
-// Serve static files from frontend build
-app.use(express.static(path.join(__dirname, './dist')));
-
-// Handle frontend routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-app.listen(port, () => {
-  console.log(`Server started on http://localhost:${port}`);
-});
+// Vercel-specific export
+export default app;
