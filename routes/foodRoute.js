@@ -1,25 +1,27 @@
-import  express from "express";
-import { addFood, listfood, removeFood} from "../controllers/foodController.js"
+import express from "express";
+import { addFood, listFood, removeFood } from "../controllers/foodController.js";
 import multer from "multer";
 
 const foodRouter = express.Router();
 
-// Image storage Engine
+// Image Storage Configuration
+const storage = process.env.NODE_ENV === "production" 
+  ? multer.memoryStorage() // For Vercel (no disk writes)
+  : multer.diskStorage({   // For local development
+      destination: "uploads",
+      filename: (req, file, cb) => {
+        cb(null, `${Date.now()}${file.originalname}`);
+      }
+    });
 
-const storage = multer.diskStorage({
-    destination:"uploads",
-    filename:(req,file,cb)=>{
-        return cb(null,`${Date.now()}${file.originalname}`)
-    }
-})
+const upload = multer({ 
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+});
 
-const upload = multer({storage:storage})
-
-foodRouter.post("/add",upload.single("image"),addFood)
-foodRouter.get("/list",listfood)
-foodRouter.post("/remove",removeFood)
-
-
-
+// Routes
+foodRouter.post("/add", upload.single("image"), addFood);
+foodRouter.get("/list", listFood);
+foodRouter.post("/remove", removeFood);
 
 export default foodRouter;
