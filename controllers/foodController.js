@@ -31,7 +31,7 @@ const addFood = async (req, res) => {
 };
 
 // List all food items
-const listfood = async (req, res) => {
+const listFood = async (req, res) => {
     try {
         const foods = await foodModel.find({});
         res.json({ success: true, data: foods });
@@ -71,4 +71,4 @@ const removeFood = async (req, res) => {
     }
 };
 
-export { addFood, listfood, removeFood };
+export { addFood, listFood, removeFood };
