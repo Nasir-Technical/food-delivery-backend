@@ -19,12 +19,15 @@ const port = process.env.PORT || 4000;
 
 // Middleware
 app.use(cors({
-  origin: ["https://mr-food-del.vercel.app", "http://localhost:5173", "http://localhost:5174"],
+  origin: ["http://localhost:5173", "http://localhost:5174"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "token"],
   credentials: true,
-  optionsSuccessStatus: 200 // For legacy browser support
+  optionsSuccessStatus: 200
 }));
+
+// ✅ Add this middleware to parse JSON request bodies
+app.use(express.json());
 
 
 // DB connection
