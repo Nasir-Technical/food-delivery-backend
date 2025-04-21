@@ -1,18 +1,27 @@
 {
-  "rewrites": [
-    {
-      "source": "/admin/(.*)",
-      "destination": "/admdist/index.html"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
+  "version": 2,
   "builds": [
+    {
+      "src": "*.js",
+      "use": "@vercel/node"
+    },
     {
       "src": "admdist/*",
       "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/admin/.*",
+      "dest": "/admdist/index.html"
+    },
+    {
+      "src": "/api/.*",
+      "dest": "server.js"  
+    },
+    {
+      "src": "/.*",
+      "dest": "/index.html"
     }
   ]
 }
