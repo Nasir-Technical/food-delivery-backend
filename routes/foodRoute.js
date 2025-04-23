@@ -16,12 +16,19 @@ const storage = process.env.NODE_ENV === "production"
 
 const upload = multer({ 
   storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'), false);
+    }
+  },
   limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 
 // Routes
 foodRouter.post("/add", upload.single("image"), addFood);
 foodRouter.get("/list", listFood);
-foodRouter.post("/remove/:id", removeFood);
+foodRouter.delete("/:id", removeFood); // Changed to DELETE and simplified path
 
 export default foodRouter;

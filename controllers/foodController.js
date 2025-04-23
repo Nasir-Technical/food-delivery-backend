@@ -1,38 +1,38 @@
 import foodModel from "../models/foodModel.js";
-import fs from 'fs/promises'; // Better fs module for async/await
+import fs from 'fs/promises';
+import mongoose from "mongoose";
 
 // Add Food Item
 const addFood = async (req, res) => {
-    // 1. Check all required fields
-    if (!req.file || !req.body.name || !req.body.description || !req.body.price || !req.body.category) {
-        return res.status(400).json({ 
-            success: false, 
-            message: "All fields are required: name, description, price, category, and image"
-        });
-    }
-
-    // 2. Validate price is a number
-    if (isNaN(req.body.price)) {
-        return res.status(400).json({ 
-            success: false, 
-            message: "Price must be a number"
-        });
-    }
-
     try {
-        // 3. Create new food item
+        // Validate all required fields
+        if (!req.file || !req.body.name || !req.body.description || !req.body.price || !req.body.category) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "All fields are required: name, description, price, category, and image"
+            });
+        }
+
+        // Validate price is a positive number
+        const price = parseFloat(req.body.price);
+        if (isNaN(price) || price <= 0) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "Price must be a positive number"
+            });
+        }
+
+        // Create new food item
         const food = new foodModel({
             name: req.body.name,
             description: req.body.description,
-            price: parseFloat(req.body.price),
+            price: price,
             category: req.body.category,
             image: req.file.filename
         });
 
-        // 4. Save to database
         await food.save();
         
-        // 5. Success response
         res.status(201).json({ 
             success: true, 
             message: "Food added successfully",
@@ -40,6 +40,12 @@ const addFood = async (req, res) => {
         });
     } catch (error) {
         console.error("Add Food Error:", error);
+        
+        // Delete uploaded file if saving to DB failed
+        if (req.file) {
+            await fs.unlink(`uploads/${req.file.filename}`).catch(err => console.error("Failed to delete uploaded file:", err));
+        }
+
         res.status(500).json({ 
             success: false, 
             message: "Failed to add food",
@@ -51,10 +57,7 @@ const addFood = async (req, res) => {
 // List All Food Items
 const listFood = async (req, res) => {
     try {
-        // 1. Get all foods sorted by newest first
         const foods = await foodModel.find({}).sort({ createdAt: -1 });
-        
-        // 2. Success response
         res.json({ 
             success: true,
             count: foods.length,
@@ -73,8 +76,15 @@ const listFood = async (req, res) => {
 // Remove Food Item
 const removeFood = async (req, res) => {
     try {
-        // 1. Find food item
-        const food = await foodModel.findById(req.body.id);
+        // Validate ID format
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "Invalid food ID format"
+            });
+        }
+
+        const food = await foodModel.findById(req.params.id);
         if (!food) {
             return res.status(404).json({ 
                 success: false, 
@@ -82,20 +92,18 @@ const removeFood = async (req, res) => {
             });
         }
 
-        // 2. Delete image file
+        // Delete image file if exists
         const filePath = `uploads/${food.image}`;
         try {
             await fs.access(filePath);
             await fs.unlink(filePath);
-            console.log(`Image deleted: ${food.image}`);
+            console.log(`Deleted image: ${food.image}`);
         } catch (err) {
             console.log(`Image not found: ${food.image}`);
         }
 
-        // 3. Delete from database
-        await foodModel.findByIdAndDelete(req.body.id);
+        await foodModel.findByIdAndDelete(req.params.id);
         
-        // 4. Success response
         res.json({ 
             success: true, 
             message: "Food removed successfully"
