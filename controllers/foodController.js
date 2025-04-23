@@ -1,120 +1,73 @@
 import foodModel from "../models/foodModel.js";
-import fs from 'fs/promises';
-import mongoose from "mongoose";
+import fs from 'fs';
 
-// Add Food Item
+// Add food item
 const addFood = async (req, res) => {
+    // Check if file and image name exist
+    if (!req.file || !req.body.name || !req.body.description || !req.body.price || !req.body.category) {
+        return res.json({ success: false, message: "Missing required fields" });
+    }
+
+    console.log("image name se a rhi >>>>>>>", req.body.image);
+    console.log("File name se a rhi >>>>>>>", req.file);
+
+    let image_filename = req.file.filename;  // Extract the filename from req.file
+
+    const food = new foodModel({
+        name: req.body.name,
+        description: req.body.description,
+        price: req.body.price,
+        category: req.body.category,
+        image: image_filename
+    });
+
     try {
-        // Validate all required fields
-        if (!req.file || !req.body.name || !req.body.description || !req.body.price || !req.body.category) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "All fields are required: name, description, price, category, and image"
-            });
-        }
-
-        // Validate price is a positive number
-        const price = parseFloat(req.body.price);
-        if (isNaN(price) || price <= 0) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Price must be a positive number"
-            });
-        }
-
-        // Create new food item
-        const food = new foodModel({
-            name: req.body.name,
-            description: req.body.description,
-            price: price,
-            category: req.body.category,
-            image: req.file.filename
-        });
-
         await food.save();
-        
-        res.status(201).json({ 
-            success: true, 
-            message: "Food added successfully",
-            data: food
-        });
+        res.json({ success: true, message: "Food Added" });
     } catch (error) {
-        console.error("Add Food Error:", error);
-        
-        // Delete uploaded file if saving to DB failed
-        if (req.file) {
-            await fs.unlink(`uploads/${req.file.filename}`).catch(err => console.error("Failed to delete uploaded file:", err));
-        }
-
-        res.status(500).json({ 
-            success: false, 
-            message: "Failed to add food",
-            error: process.env.NODE_ENV === 'development' ? error.message : undefined
-        });
+        console.log(error);
+        res.json({ success: false, message: "Error" });
     }
 };
 
-// List All Food Items
+// List all food items
 const listFood = async (req, res) => {
     try {
-        const foods = await foodModel.find({}).sort({ createdAt: -1 });
-        res.json({ 
-            success: true,
-            count: foods.length,
-            data: foods
-        });
+        const foods = await foodModel.find({});
+        res.json({ success: true, data: foods });
     } catch (error) {
-        console.error("List Food Error:", error);
-        res.status(500).json({ 
-            success: false, 
-            message: "Failed to get food list",
-            error: process.env.NODE_ENV === 'development' ? error.message : undefined
-        });
+        console.log(error);
+        res.json({ success: false, message: "Error" });
     }
 };
 
-// Remove Food Item
+// Remove food item
 const removeFood = async (req, res) => {
     try {
-        // Validate ID format
-        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Invalid food ID format"
-            });
-        }
+        console.log("Received ID:", req.body.id); // Log the ID to ensure it's received correctly
 
-        const food = await foodModel.findById(req.params.id);
+        const food = await foodModel.findById(req.body.id);
         if (!food) {
-            return res.status(404).json({ 
-                success: false, 
-                message: "Food item not found"
-            });
+            return res.json({ success: false, message: "Food item not found" });
         }
 
-        // Delete image file if exists
-        const filePath = `uploads/${food.image}`;
-        try {
-            await fs.access(filePath);
-            await fs.unlink(filePath);
-            console.log(`Deleted image: ${food.image}`);
-        } catch (err) {
-            console.log(`Image not found: ${food.image}`);
-        }
-
-        await foodModel.findByIdAndDelete(req.params.id);
-        
-        res.json({ 
-            success: true, 
-            message: "Food removed successfully"
+        // Ensure file exists before trying to delete
+        fs.access(`uploads/${food.image}`, fs.constants.F_OK, (err) => {
+            if (err) {
+                console.log(`File ${food.image} does not exist, skipping deletion`);
+            } else {
+                fs.unlink(`uploads/${food.image}`, (err) => {
+                    if (err) console.log(err);
+                    else console.log(`File ${food.image} deleted`);
+                });
+            }
         });
+
+        await foodModel.findByIdAndDelete(req.body.id);
+        res.json({ success: true, message: "Food removed" });
     } catch (error) {
-        console.error("Remove Food Error:", error);
-        res.status(500).json({ 
-            success: false, 
-            message: "Failed to remove food",
-            error: process.env.NODE_ENV === 'development' ? error.message : undefined
-        });
+        console.log(error);
+        res.json({ success: false, message: "Error" });
     }
 };
 
