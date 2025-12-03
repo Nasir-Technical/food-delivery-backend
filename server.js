@@ -19,7 +19,7 @@ const port = process.env.PORT || 4000;
 
 // Middleware
 app.use(cors({
-  origin: ["https://food-del-ashen-ten.vercel.app","http://localhost:5173", "http://localhost:5174"],
+  origin: ["http://localhost:5173", "http://localhost:5174"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "token"],
   credentials: true,
@@ -46,7 +46,7 @@ app.use('/images', express.static('uploads'));
 app.use('/admin', express.static(path.join(__dirname, './admdist')));
 
 // Handle admin routes
-app.get('/admin/*', (req, res) => {
+app.get('/admin/*splat', (req, res) => {
   res.sendFile(path.join(__dirname, './admdist', 'index.html'));
 });
 
@@ -54,12 +54,12 @@ app.get('/admin/*', (req, res) => {
 app.use(express.static(path.join(__dirname, './dist')));
 
 // Handle frontend routes
-app.get('*', (req, res) => {
+app.get('/*splat', (req, res) => {
   res.sendFile(path.join(__dirname, './dist', 'index.html'));
 });
 
-// app.listen(port, () => {
-//   console.log(`Server started on http://localhost:${port}`);
-// });
+app.listen(port, () => {
+  console.log(`Server started on http://localhost:${port}`);
+});
 
 export default app;

@@ -46,7 +46,7 @@ const removeFood = async (req, res) => {
     try {
         console.log("Received ID:", req.body.id); // Log the ID to ensure it's received correctly
 
-        const food = await foodModel.findById(req.body.id);
+        const food = await foodModel.findById(req.params.id);
         if (!food) {
             return res.json({ success: false, message: "Food item not found" });
         }
@@ -63,7 +63,7 @@ const removeFood = async (req, res) => {
             }
         });
 
-        await foodModel.findByIdAndDelete(req.body.id);
+        await foodModel.findByIdAndDelete(req.params.id);
         res.json({ success: true, message: "Food removed" });
     } catch (error) {
         console.log(error);
