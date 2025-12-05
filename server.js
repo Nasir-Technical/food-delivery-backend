@@ -20,29 +20,29 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 // // Middleware
-app.use(cors({
-  origin: ["http://localhost:5173", "http://localhost:5174"],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "token"],
-  credentials: true,
-  optionsSuccessStatus: 200
-}));
+// app.use(cors({
+//   origin: ["http://localhost:5173", "http://localhost:5174"],
+//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//   allowedHeaders: ["Content-Type", "Authorization", "token"],
+//   credentials: true,
+//   optionsSuccessStatus: 200
+// }));
 
 
 // CORS FIX (Vercel Serverless Compatible)
-// const corsOptions = {
-//   origin: [
-//     "https://food-delivery-frontend-eight-iota.vercel.app",
-//     "http://localhost:3000",
-//     "https://food-delivery-admin-ecru.vercel.app",
-//     "https://food-delivery-backend-nu-seven.vercel.app/"
-//   ],
-//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//   credentials: true,
-//   allowedHeaders: "Content-Type, Authorization"
-// };
+const corsOptions = {
+  origin: [
+    "https://food-delivery-frontend-eight-iota.vercel.app",
+    "https://food-delivery-admin-ecru.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:5174"
+  ],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  allowedHeaders: "Content-Type, Authorization"
+};
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 // app.options("*", cors(corsOptions)); // <-- VERY IMPORTANT
 
 // Middleware
