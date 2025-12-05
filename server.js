@@ -8,6 +8,8 @@ import cartRouter from './routes/cartRoute.js';
 import orderRouter from './routes/orderRoute.js';
 import 'dotenv/config'; // Load environment variables
 import { fileURLToPath } from 'url';
+// import cookieParser from "cookie-parser";
+
 
 // File and directory utilities for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -48,7 +50,7 @@ app.options("*", cors(corsOptions)); // <-- VERY IMPORTANT
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+// app.use(cookieParser());
 
 
 // DB connection
