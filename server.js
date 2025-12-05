@@ -17,7 +17,7 @@ const __dirname = path.dirname(__filename);
 
 // App configuration
 const app = express();
-const port = process.env.PORT || 4000;
+// const port = process.env.PORT || 4000;
 
 // // Middleware
 // app.use(cors({
@@ -85,8 +85,8 @@ app.get('/*splat', (req, res) => {
   res.sendFile(path.join(__dirname, './dist', 'index.html'));
 });
 
-app.listen(port, () => {
-  console.log(`Server started on http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server started on http://localhost:${port}`);
+// });
 
 export default app;
