@@ -2,14 +2,38 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/server.js",
+      "src": "server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "admdist/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "dist/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/admin",
+      "dest": "/admdist/index.html"
+    },
+    {
+      "src": "/admin/(.*)",
+      "dest": "/admdist/index.html"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "server.js"
+    },
+    {
       "src": "/(.*)",
-      "dest": "api/server.js"
+      "dest": "server.js"
     }
   ]
 }
