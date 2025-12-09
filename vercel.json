@@ -3,7 +3,7 @@
 
   "functions": {
     "api/server.js": {
-      "runtime": "nodejs18.x",
+      "use": "@vercel/node",
       "maxDuration": 10
     }
   },
