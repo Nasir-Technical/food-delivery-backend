@@ -1,8 +1,36 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/server.js" },
-    { "source": "/admin/(.*)", "destination": "/admdist/index.html" },
-    { "source": "/(.*)", "destination": "/dist/index.html" }
+
+  "functions": {
+    "api/server.js": {
+      "runtime": "nodejs18.x",
+      "maxDuration": 10
+    }
+  },
+
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/server.js"
+    },
+
+    {
+      "src": "/admin/(.*)",
+      "dest": "/admdist/$1"
+    },
+    {
+      "src": "/admin",
+      "dest": "/admdist/index.html"
+    },
+
+    {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
+      "dest": "/dist/$1"
+    },
+
+    {
+      "src": "/(.*)",
+      "dest": "/dist/index.html"
+    }
   ]
 }
