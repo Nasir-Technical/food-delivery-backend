@@ -1,11 +1,15 @@
 {
   "version": 2,
   "builds": [
-    { "src": "/api/server.js", "use": "@vercel/node" }
+    {
+      "src": "api/server.js",
+      "use": "@vercel/node"
+    }
   ],
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/server.js" },
-    { "source": "/admin/(.*)", "destination": "/admdist/index.html" },
-    { "source": "/(.*)", "destination": "/dist/index.html" }
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/server.js"
+    }
   ]
 }
