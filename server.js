@@ -69,21 +69,21 @@ app.get("/api/test", (req, res) => {
 // Serve images from uploads folder
 app.use('/images', express.static('uploads'));
 
-// Serve static files from admin build
-app.use('/admin', express.static(path.join(__dirname, './admdist')));
+// // Serve static files from admin build
+// app.use('/admin', express.static(path.join(__dirname, './admdist')));
 
-// Handle admin routes
-app.get('/admin/*splat', (req, res) => {
-  res.sendFile(path.join(__dirname, './admdist', 'index.html'));
-});
+// // Handle admin routes
+// app.get('/admin/*splat', (req, res) => {
+//   res.sendFile(path.join(__dirname, './admdist', 'index.html'));
+// });
 
-// Serve static files from frontend build
-app.use(express.static(path.join(__dirname, './dist')));
+// // Serve static files from frontend build
+// app.use(express.static(path.join(__dirname, './dist')));
 
-// Handle frontend routes
-app.get('/*splat', (req, res) => {
-  res.sendFile(path.join(__dirname, './dist', 'index.html'));
-});
+// // Handle frontend routes
+// app.get('/*splat', (req, res) => {
+//   res.sendFile(path.join(__dirname, './dist', 'index.html'));
+// });
 
 app.listen(port, () => {
   console.log(`Server started on http://localhost:${port}`);
