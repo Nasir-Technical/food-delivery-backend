@@ -7,8 +7,5 @@
     { "source": "/api/(.*)", "destination": "/api/server.js" },
     { "source": "/admin/(.*)", "destination": "/admdist/index.html" },
     { "source": "/(.*)", "destination": "/dist/index.html" }
-  ],
-  "functions": {
-    "/api/server.js": { "maxDuration": 60 }
-  }
+  ]
 }
