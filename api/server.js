@@ -23,7 +23,7 @@ app.use(cors({
 }));
 
 // DB
-// await connectDB();   // <-- only ONE connection, here
+await connectDB();   // <-- only ONE connection, here
 
 // Middlewares
 app.use(express.json());
