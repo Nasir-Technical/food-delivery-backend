@@ -34,8 +34,9 @@ app.use('/user', userRouter);
 app.use('/cart', cartRouter);
 app.use('/order', orderRouter);
 
-app.get('/api/test', (req, res) => {
+app.get("/test", (req, res) => {
   res.send("Backend working!");
 });
+
 
 export default serverless(app);
