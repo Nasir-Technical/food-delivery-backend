@@ -23,6 +23,7 @@ dotenv.config();
 
 // App initialize
 const app = express();
+console.log("🚀 Server Starting... Vercel Fix v2");
 
 // CORS FIX (Vercel Serverless Compatible)
 const corsOptions = {
