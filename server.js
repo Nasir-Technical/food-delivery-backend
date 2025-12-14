@@ -18,8 +18,8 @@ const __dirname = path.dirname(__filename);
 // Load env vars
 dotenv.config();
 
-// DB connection
-connectDB();
+// // DB connection
+// connectDB();
 
 // App initialize
 const app = express();
@@ -45,17 +45,30 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(cookieParser());
 
-// API endpoints
-app.use('/api/food', foodRouter);
-app.use('/api/user', userRouter);
-app.use('/api/cart', cartRouter);
-app.use('/api/order', orderRouter);
 
 // Health check
 app.get("/api/test", (req, res) => {
   res.type('text');
   res.send("Backend is working!");
 });
+
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        console.error("DB Connect Error:", error);
+        res.status(500).json({ success: false, message: "Database Connection Failed" });
+    }
+});
+
+// API endpoints
+app.use('/api/food', foodRouter);
+app.use('/api/user', userRouter);
+app.use('/api/cart', cartRouter);
+app.use('/api/order', orderRouter);
+
+
 
 // Serve images from uploads folder
 app.use('/images', express.static('uploads'));
@@ -77,9 +90,12 @@ app.use('/images', express.static('uploads'));
 // });
 
 // Start server
-// const PORT = process.env.PORT || 4000;
-// app.listen(PORT, () => {
-//     console.log(`✅ Server is running on port ${PORT}`);
-// });
+// Start server
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+    const PORT = process.env.PORT || 4000;
+    app.listen(PORT, () => {
+        console.log(`✅ Server is running on port ${PORT}`);
+    });
+}
 
 export default app;
