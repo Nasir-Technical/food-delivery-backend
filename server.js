@@ -35,11 +35,11 @@ const corsOptions = {
   ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
-  allowedHeaders: "Content-Type, Authorization"
+  allowedHeaders: "Content-Type, Authorization, token"
 };
 
 app.use(cors(corsOptions));
-// app.options("*", cors(corsOptions)); // <-- VERY IMPORTANT
+// app.options("*", cors(corsOptions)); // <-- Commented out: Causes crash in Express 5 and is not needed if cors middleware manages preflights correctly
 
 // Middleware
 app.use(express.json());
