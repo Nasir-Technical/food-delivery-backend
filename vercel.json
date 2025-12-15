@@ -4,36 +4,12 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "admdist/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "dist/**",
-      "use": "@vercel/static"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "server.js"
-    },
-    {
-      "src": "/admin",
-      "dest": "/admdist/index.html"
-    },
-    {
-      "src": "/admin/(.*)",
-      "dest": "/admdist/index.html"
-    },
-    {
-      "src": "/images/(.*)",
-      "dest": "server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "server.js"
+      "source": "/(.*)",
+      "destination": "/server.js"
     }
   ]
 }
