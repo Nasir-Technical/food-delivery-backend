@@ -91,7 +91,6 @@ app.use('/images', express.static('uploads'));
 // });
 
 // Start server
-// Start server
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
     const PORT = process.env.PORT || 4000;
     app.listen(PORT, () => {
